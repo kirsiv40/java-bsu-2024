@@ -7,4 +7,6 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
         STARTED
     }
 
+    ContextStatus is_started = ContextStatus.NOT_STARTED;
+
 }

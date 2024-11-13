@@ -11,13 +11,15 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class HardCodedSingletonApplicationContextTest {
+// Simple works the same way as HardCoded
+
+class SimpleApplicationContextTest {
 
     private ApplicationContext applicationContext;
 
     @BeforeEach
     void init() {
-        applicationContext = new HardCodedSingletonApplicationContext(FirstBean.class, OtherBean.class);
+        applicationContext = new SimpleApplicationContext(FirstBean.class, OtherBean.class);
     }
 
     @Test
@@ -96,5 +98,5 @@ class HardCodedSingletonApplicationContextTest {
                 NoSuchBeanDefinitionException.class,
                 () -> applicationContext.isPrototype("randomName")
         );
-    }
+    }   
 }

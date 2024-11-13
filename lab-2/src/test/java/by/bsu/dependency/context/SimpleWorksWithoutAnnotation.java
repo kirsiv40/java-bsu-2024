@@ -1,7 +1,7 @@
 package by.bsu.dependency.context;
 
-import by.bsu.dependency.example.FirstBean;
-import by.bsu.dependency.example.OtherBean;
+import by.bsu.dependency.context.ClassesForSimpleApplicationContextTest.FirstBeanWithoutAnnotation;
+import by.bsu.dependency.context.ClassesForSimpleApplicationContextTest.OtherBeanWithoutAnnotation;
 import by.bsu.dependency.exceptions.ApplicationContextNotStartedException;
 import by.bsu.dependency.exceptions.NoSuchBeanDefinitionException;
 
@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class HardCodedSingletonApplicationContextTest {
+class SimpleWorksWithoutAnnotation {
 
     private ApplicationContext applicationContext;
 
     @BeforeEach
     void init() {
-        applicationContext = new HardCodedSingletonApplicationContext(FirstBean.class, OtherBean.class);
+        applicationContext = new SimpleApplicationContext(FirstBeanWithoutAnnotation.class, OtherBeanWithoutAnnotation.class);
     }
 
     @Test
@@ -39,8 +39,8 @@ class HardCodedSingletonApplicationContextTest {
     void testContextContainsBeans() {
         applicationContext.start();
 
-        assertThat(applicationContext.containsBean("firstBean")).isTrue();
-        assertThat(applicationContext.containsBean("otherBean")).isTrue();
+        assertThat(applicationContext.containsBean("firstBeanWithoutAnnotation")).isTrue();
+        assertThat(applicationContext.containsBean("otherBeanWithoutAnnotation")).isTrue();
         assertThat(applicationContext.containsBean("randomName")).isFalse();
     }
 
@@ -56,8 +56,8 @@ class HardCodedSingletonApplicationContextTest {
     void testGetBeanReturns() {
         applicationContext.start();
 
-        assertThat(applicationContext.getBean("firstBean")).isNotNull().isInstanceOf(FirstBean.class);
-        assertThat(applicationContext.getBean("otherBean")).isNotNull().isInstanceOf(OtherBean.class);
+        assertThat(applicationContext.getBean("firstBeanWithoutAnnotation")).isNotNull().isInstanceOf(FirstBeanWithoutAnnotation.class);
+        assertThat(applicationContext.getBean("otherBeanWithoutAnnotation")).isNotNull().isInstanceOf(OtherBeanWithoutAnnotation.class);
     }
 
     @Test
@@ -72,8 +72,8 @@ class HardCodedSingletonApplicationContextTest {
 
     @Test
     void testIsSingletonReturns() {
-        assertThat(applicationContext.isSingleton("firstBean")).isTrue();
-        assertThat(applicationContext.isSingleton("otherBean")).isTrue();
+        assertThat(applicationContext.isSingleton("firstBeanWithoutAnnotation")).isTrue();
+        assertThat(applicationContext.isSingleton("otherBeanWithoutAnnotation")).isTrue();
     }
 
     @Test
@@ -86,8 +86,8 @@ class HardCodedSingletonApplicationContextTest {
 
     @Test
     void testIsPrototypeReturns() {
-        assertThat(applicationContext.isPrototype("firstBean")).isFalse();
-        assertThat(applicationContext.isPrototype("otherBean")).isFalse();
+        assertThat(applicationContext.isPrototype("firstBeanWithoutAnnotation")).isFalse();
+        assertThat(applicationContext.isPrototype("otherBeanWithoutAnnotation")).isFalse();
     }
 
     @Test
@@ -97,4 +97,6 @@ class HardCodedSingletonApplicationContextTest {
                 () -> applicationContext.isPrototype("randomName")
         );
     }
+
+    
 }
