@@ -341,7 +341,7 @@ class TextTask implements Task {
 
 Перенесите обшую логику из `ExpressionMathTask` и `EquationMathTask` в `AbstractMathTask`.
 
-Добавьте в интерфейс MathTaskGenerator методы:
+Добавьте в интерфейс `MathTaskGenerator` методы:
 ```java
 int getMinNumber(); // получить минимальное число
 int getMaxNumber(); // получить максимальное число
@@ -359,14 +359,15 @@ default int getDiffNumber();
 
 Сейчас сигнатуры `ExpressionTaskGenerator` и `EquationTaskGenerator` выглядят не очень красиво, приходится передавать туда 4 була для каждого оператора. Сделайте `enum Operation` внутри интерфейса `MathTask` и передавайте в `ExpressionTaskGenerator` и `EquationTaskGenerator` вместо булов `EnumSet`.
 
-## ★★ Generic ExpressionTask и EquationTask
-Сделайте, чтобы `ExpressionTaskGenerator` и `EquationTaskGenerator` работал с произвольным типом `T`, расширяющим `Number`. Для реализации скорее всего вам поможет метод `doubleValue()`, который определен у `Number`. Также нужно изменить сигнатуру в методах `getMinNumber()`, `getMaxNumnber()`, `getDiffNumber` интерфейса `MathTask`, чтобы они возвращали `double`.
+## ★★ Generic Task Generators
+
+Добавьте параметризацию в интерфейс `TaskGenerator` таким образом, чтобы он генерировал определенный тип задач. Метод `generate` теперь должен возвращать не просто `Task`, а параметр `T`, который этот интерфейс реализует. Понятно, что при этом классы `ExpressionTaskGenerator` и `EquationTaskGenerator` не должны быть дженериками, они всегда возвращают `ExpressionTask` и `EquationTask`, соответственно. А вот над тем, добавлять ли параметризацию в `GroupTaskGenerator` и `PoolTaskGenerator`, предлагается подумать самостоятельно. 
 
 ## ★ UML
 В каком-нибудь онлайн UML-редакторе (если очень хочется, можно и в пеинте) сделайте схему с участием всех интерфейсов и классов. Это схему нужно приложить в AnyTask к ссылке на github.
 
 ## Добавляем исключения
-Добавьте исключения везде, где это необходимо. Например, когда у `Quiz` вызывается метод `getMark()`, пока тест не завершен или в конструктор `*MathTask` `maxNumber` передается меньше, чем `minNumber`, в `precision` передается некорректное число и т.д. В случае некорректных `minNumber`, `maxNumber`, `precision` уместно использовать `IllegalArgumentException`, для раннего вызова `getMark()` стоит сделать свое исключение, назвать `QuizNotFinishedException`. Все свои исключения стоит создавать в пакете `exceptions`.
+Добавьте исключения везде, где это необходимо. Например, когда у `Quiz` вызывается метод `getMark()`, пока тест не завершен или в конструктор `*MathTask` `maxNumber` передается меньше, чем `minNumber` и т.д. В случае некорректных `minNumber`, `maxNumber` уместно использовать `IllegalArgumentException`, для раннего вызова `getMark()` стоит сделать свое исключение, назвать `QuizNotFinishedException`. Все свои исключения стоит создавать в пакете `exceptions`.
 
 ## Добавляем тесты (Quiz) и проверяем
 Теперь добавьте в метод `getQuizMap()` тестов (минимум 5) и тщательно протестируйте приложение. Обязательно используйте все созданные классы, постарайтесь придумать свои `TaskGenerator`. Например, который генерирует задания вида _"У **A** было X яблок, он(она) подарил(а) **B** Y яблок. Сколько яблок осталось у **A**?"_.
