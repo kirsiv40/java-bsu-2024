@@ -1,24 +1,28 @@
 package by.bsu.dependency.context;
 
-import by.bsu.dependency.context.ClassesForSimpleApplicationContextTest.PostConstructBean1;
-import by.bsu.dependency.context.ClassesForSimpleApplicationContextTest.PostConstructBean2;
-import by.bsu.dependency.context.ClassesForSimpleApplicationContextTest.PostConstructPrototypeBean1;
-import by.bsu.dependency.context.ClassesForSimpleApplicationContextTest.PostConstructPrototypeBean2;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import by.bsu.dependency.annotation.PostConstruct;
+import by.bsu.dependency.context.SimpleApplicationContextTestClasses.PostConstructBean1;
+import by.bsu.dependency.context.SimpleApplicationContextTestClasses.PostConstructBean2;
+import by.bsu.dependency.context.SimpleApplicationContextTestClasses.PostConstructPrototypeBean1;
+import by.bsu.dependency.context.SimpleApplicationContextTestClasses.PostConstructPrototypeBean2;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-
+/**
+ * Checks that the function with {@link PostConstruct} is called 
+ * and verifies that constructors and {@link PostConstruct} calls
+ * are made in the correct sequence
+ */
 public class PostConstructTest {
     private ApplicationContext applicationContext;
 
-    public static ArrayList<String> ids;
+    public static ArrayList<String> ids = new ArrayList<>();
 
     @BeforeEach
     void init() {

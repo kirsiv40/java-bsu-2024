@@ -1,4 +1,4 @@
-package by.bsu.dependency.context.ClassesForSimpleApplicationContextTest;
+package by.bsu.dependency.context.SimpleApplicationContextTestClasses;
 
 import by.bsu.dependency.annotation.Bean;
 import by.bsu.dependency.annotation.PostConstruct;

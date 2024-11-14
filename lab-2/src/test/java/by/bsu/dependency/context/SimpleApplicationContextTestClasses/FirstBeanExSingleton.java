@@ -1,13 +1,13 @@
-package by.bsu.dependency.context.ClassesForSimpleApplicationContextTest;
+package by.bsu.dependency.context.SimpleApplicationContextTestClasses;
 
 import by.bsu.dependency.annotation.Bean;
 import by.bsu.dependency.annotation.BeanScope;
 
 @Bean(name = "firstBeanInjSingleton", scope = BeanScope.SINGLETON)
-public class FirstBeanInjSingleton {
+public class FirstBeanExSingleton {
     static private int counter = 0;
 
-    public FirstBeanInjSingleton() {
+    public FirstBeanExSingleton() {
         ++counter;
     }
 

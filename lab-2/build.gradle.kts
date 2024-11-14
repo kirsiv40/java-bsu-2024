@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     implementation("org.reflections:reflections:0.10.2")
+    implementation("org.slf4j:slf4j-api:2.0.16")
 
     compileOnly("org.projectlombok:lombok:1.18.34")
 

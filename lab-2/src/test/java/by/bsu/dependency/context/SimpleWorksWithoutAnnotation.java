@@ -1,7 +1,9 @@
 package by.bsu.dependency.context;
 
-import by.bsu.dependency.context.ClassesForSimpleApplicationContextTest.FirstBeanWithoutAnnotation;
-import by.bsu.dependency.context.ClassesForSimpleApplicationContextTest.OtherBeanWithoutAnnotation;
+import by.bsu.dependency.annotation.Bean;
+import by.bsu.dependency.annotation.Inject;
+import by.bsu.dependency.context.SimpleApplicationContextTestClasses.FirstBeanWithoutAnnotation;
+import by.bsu.dependency.context.SimpleApplicationContextTestClasses.OtherBeanWithoutAnnotation;
 import by.bsu.dependency.exceptions.ApplicationContextNotStartedException;
 import by.bsu.dependency.exceptions.NoSuchBeanDefinitionException;
 
@@ -11,6 +13,16 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+
+/**
+ * Checks that {@link Inject} works correct when some arguments in
+ * {@link Bean} are skipped, or {@link Bean} annotation is missing, like
+ * 
+ * <pre>
+ * @Bean(scope = BeanScope.PROTOTYPE)
+ * class SomeClass ...
+ * </pre>
+ */
 class SimpleWorksWithoutAnnotation {
 
     private ApplicationContext applicationContext;
@@ -97,6 +109,4 @@ class SimpleWorksWithoutAnnotation {
                 () -> applicationContext.isPrototype("randomName")
         );
     }
-
-    
 }

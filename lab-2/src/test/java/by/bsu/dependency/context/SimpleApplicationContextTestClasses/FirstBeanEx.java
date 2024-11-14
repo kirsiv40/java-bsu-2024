@@ -1,13 +1,13 @@
-package by.bsu.dependency.context.ClassesForSimpleApplicationContextTest;
+package by.bsu.dependency.context.SimpleApplicationContextTestClasses;
 
 import by.bsu.dependency.annotation.Bean;
 import by.bsu.dependency.annotation.BeanScope;
 
 @Bean(name = "firstBeanInj", scope = BeanScope.PROTOTYPE)
-public class FirstBeanInj {
+public class FirstBeanEx {
     static private int counter = 0;
 
-    public FirstBeanInj() {
+    public FirstBeanEx() {
         ++counter;
     }
 

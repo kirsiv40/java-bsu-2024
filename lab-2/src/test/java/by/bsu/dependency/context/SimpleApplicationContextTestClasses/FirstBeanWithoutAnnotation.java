@@ -1,4 +1,4 @@
-package by.bsu.dependency.context.ClassesForSimpleApplicationContextTest;
+package by.bsu.dependency.context.SimpleApplicationContextTestClasses;
 
 public class FirstBeanWithoutAnnotation {
 

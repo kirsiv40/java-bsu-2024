@@ -12,13 +12,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 // Simple works the same way as HardCoded
-
 class SimpleApplicationContextTest {
 
     private ApplicationContext applicationContext;
 
     @BeforeEach
     void init() {
+        // applicationContext = new SimpleApplicationContext(FirstBean.class, OtherBean.class);
         applicationContext = new SimpleApplicationContext(FirstBean.class, OtherBean.class);
     }
 

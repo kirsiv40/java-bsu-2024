@@ -1,17 +1,17 @@
-package by.bsu.dependency.context.ClassesForSimpleApplicationContextTest;
+package by.bsu.dependency.context.SimpleApplicationContextTestClasses;
 
 import by.bsu.dependency.annotation.Bean;
 import by.bsu.dependency.annotation.BeanScope;
 import by.bsu.dependency.annotation.Inject;
 
 @Bean(name = "otherBeanInj", scope = BeanScope.PROTOTYPE)
-public class OtherBeanInj {
+public class OtherBeanEx {
 
     @Inject
-    private FirstBeanInj blablabla;
+    private FirstBeanEx blablabla;
 
     @Inject
-    private FirstBeanInjSingleton firstBeanInjSingleton;
+    private FirstBeanExSingleton firstBeanInjSingleton;
 
     void doSomething() {
         System.out.println("Hi, I'm other bean");
@@ -22,11 +22,11 @@ public class OtherBeanInj {
         blablabla.doSomething();
     }
 
-    public FirstBeanInj getFirstBean() {
+    public FirstBeanEx getFirstBean() {
         return blablabla;
     }
 
-    public FirstBeanInjSingleton getFirstSingletonBean() {
+    public FirstBeanExSingleton getFirstSingletonBean() {
         return firstBeanInjSingleton;
     }
 }
