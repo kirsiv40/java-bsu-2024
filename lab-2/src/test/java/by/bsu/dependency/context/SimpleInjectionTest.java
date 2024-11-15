@@ -18,9 +18,9 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Simple Test of Injections
- * Also checks that the framework injects dependencies by field type, not by name,
- * and verifies that an exception is thrown when a circular dependency is found
+ * Простой тест внедрений
+ * Также проверяет, что фреймворк внедряет зависимости по типу поля, а не по имени.
+ * Проверяет, что исключение выбрасывается при обнаружении циклической зависимости.
  */
 class SimpleInjectionTest {
 

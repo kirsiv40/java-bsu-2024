@@ -13,9 +13,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
- * Checks that {@link AutoScanApplicationContext} works the same as
- * {@link SimpleApplicationContext} and doesn't do anything with classes
- * without the {@link Bean} annotation.
+ * Проверяет, что {@link AutoScanApplicationContext} работает так же, как
+ * {@link SimpleApplicationContext} и не трогает классы
+ * без аннотации {@link Bean}.
  */
 class AutoScanApplicationContextTest {
     private AutoScanApplicationContext applicationContext;

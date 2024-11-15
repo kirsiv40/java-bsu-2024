@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Checks that the function with {@link PostConstruct} is called 
- * and verifies that constructors and {@link PostConstruct} calls
- * are made in the correct sequence
+ * Проверяет, что функция с {@link PostConstruct} вызывается 
+ * и то, что вызовы конструкторов и {@link PostConstruct}
+ * выполняются в правильной последовательности
  */
 public class PostConstructTest {
     private ApplicationContext applicationContext;

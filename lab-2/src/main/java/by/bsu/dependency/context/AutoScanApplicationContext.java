@@ -15,6 +15,6 @@ public class AutoScanApplicationContext extends SimpleApplicationContext {
      * @param packageName имя сканируемого пакета
      */
     public AutoScanApplicationContext(String packageName) {
-        super((new Reflections(packageName)).getTypesAnnotatedWith(Bean.class));
+        super((new Reflections(packageName)).getTypesAnnotatedWith(Bean.class), true);
     }
 }

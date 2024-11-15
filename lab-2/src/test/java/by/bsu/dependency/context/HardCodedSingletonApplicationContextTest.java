@@ -1,7 +1,7 @@
 package by.bsu.dependency.context;
 
-import by.bsu.dependency.example.FirstBean;
-import by.bsu.dependency.example.OtherBean;
+import by.bsu.dependency.context.SimpleClasses.FirstBean;
+import by.bsu.dependency.context.SimpleClasses.OtherBean;
 import by.bsu.dependency.exceptions.ApplicationContextNotStartedException;
 import by.bsu.dependency.exceptions.NoSuchBeanDefinitionException;
 

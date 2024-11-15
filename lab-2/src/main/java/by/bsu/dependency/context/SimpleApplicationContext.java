@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import by.bsu.dependency.annotation.Bean;
@@ -27,11 +25,17 @@ public class SimpleApplicationContext extends AbstractApplicationContext {
     protected Map<String, Object> singletonBeans = new HashMap<>();
     protected Map<Class<?>, Object> singletonBeansByClass = new HashMap<>();
     
-    // protected record recClassStorage<T>(Class<>) {
-    // }
+    protected record recClassStorage<T>(DefnRecord<T> definition, T instance) {
+    }
 
-    public SimpleApplicationContext(Collection<Class<?>> beanClassesCollection) {
+    public SimpleApplicationContext(Collection<Class<?>> beanClassesCollection, boolean takeClassesWithoutAnnotation) {
         super(new HashMap<String, DefnRecord<?>>(beanClassesCollection.stream()
+            .filter(el -> {
+                if (takeClassesWithoutAnnotation) {
+                    return true;
+                }
+                return el.isAnnotationPresent(Bean.class);
+            })
             .collect(Collectors.toMap(el -> {
                 if (el.isAnnotationPresent(Bean.class) && !el.getAnnotation(Bean.class).name().isEmpty()) {
                     return el.getAnnotation(Bean.class).name();
@@ -41,7 +45,7 @@ public class SimpleApplicationContext extends AbstractApplicationContext {
                     String temp = Character.toLowerCase(realname.charAt(0)) + realname.substring(1);
                     return temp;
                 }
-            }, 
+            },
             el -> {
                 Optional<Method> method = Arrays.asList(el.getDeclaredMethods()).stream()
                     .filter(el_method -> el_method.isAnnotationPresent(PostConstruct.class))
@@ -73,7 +77,11 @@ public class SimpleApplicationContext extends AbstractApplicationContext {
      * @param beanClasses классы, из которых требуется создать бины
      */
     public SimpleApplicationContext(Class<?>... beanClasses) {
-        this(new ArrayList<Class<?>>(Arrays.asList(beanClasses)));
+        this(new ArrayList<Class<?>>(Arrays.asList(beanClasses)), true);
+    }
+
+    public SimpleApplicationContext(boolean takeWA, Class<?>... beanClasses) {
+        this(new ArrayList<Class<?>>(Arrays.asList(beanClasses)), takeWA);
     }
 
     /**
@@ -101,6 +109,7 @@ public class SimpleApplicationContext extends AbstractApplicationContext {
 
         for (String name : singletonBeans.keySet()) {
             // fields init
+            Map<Class<?>, Object> rec_singletons = new HashMap<>();
             for (Field field : singletonBeans.get(name).getClass().getDeclaredFields()) {
                 if (field.isAnnotationPresent(Inject.class)) {
                     if (!beanDefinitionsByClass.containsKey(field.getType())) {
@@ -108,7 +117,7 @@ public class SimpleApplicationContext extends AbstractApplicationContext {
                     }
                     field.setAccessible(true);
                     try {
-                        field.set(singletonBeans.get(name), getBean(field.getType(), new HashSet<>()));
+                        field.set(singletonBeans.get(name), getBean(field.getType(), new HashMap<>(), rec_singletons));
                     } catch (IllegalArgumentException | IllegalAccessException e) {
                         e.printStackTrace();
                         return;
@@ -157,11 +166,11 @@ public class SimpleApplicationContext extends AbstractApplicationContext {
         if (!isRunning()) {
             throw new ApplicationContextNotStartedException();
         }
-        return getBean(clazz, new HashSet<>());
+        return getBean(clazz, new HashMap<>(), new HashMap<>());
     }
 
     @SuppressWarnings("unchecked")
-    protected <T> T getBean(Class<T> clazz, Set<Class<?>> rec_deps) {
+    protected <T> T getBean(Class<T> clazz, Map<Class<?>, recClassStorage<?>> rec_deps, Map<Class<?>, Object> rec_singletons) {
         if (!beanDefinitionsByClass.containsKey(clazz)) {
             throw new NoSuchBeanDefinitionException();
         }
@@ -170,12 +179,15 @@ public class SimpleApplicationContext extends AbstractApplicationContext {
             return (T) singletonBeansByClass.get(clazz);
         }
 
-        if (rec_deps.contains(clazz)) {
+        if (rec_deps.containsKey(clazz) && record.scope().equals(BeanScope.BLOCK_ELEMENT)) {
+            return (T) rec_deps.get(clazz).instance;
+        }
+
+        if (rec_deps.containsKey(clazz)) {
             throw new CircularDependencyFoundException(clazz.getName());
         }
 
-        Set<Class<?>> new_rec_deps = new HashSet<>(rec_deps);
-        new_rec_deps.add(clazz);
+        Map<Class<?>, recClassStorage<?>> new_rec_deps = new HashMap<>(rec_deps);
 
         Object newInstance = null;
         try {
@@ -186,12 +198,23 @@ public class SimpleApplicationContext extends AbstractApplicationContext {
             return null;
         }
 
+        new_rec_deps.put(clazz, new recClassStorage<T>(record, (T) newInstance));
+
         //fields init
         for (Field field : newInstance.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(Inject.class)) {
                 field.setAccessible(true);
                 try {
-                    field.set(newInstance, getBean(field.getType(), new_rec_deps));
+                    if (field.getAnnotation(Inject.class).canUseLastSameClass() && new_rec_deps.containsKey(field.getType())) {
+                        field.set(newInstance, new_rec_deps.get(field.getType()).instance);
+                    } else if (beanDefinitionsByClass.get(field.getType()).scope().equals(BeanScope.BLOCK_SINGLETON)) { 
+                        if (!rec_singletons.containsKey(clazz)) {
+                            rec_singletons.put(clazz, getBean(field.getType(), new_rec_deps, rec_singletons));
+                        }
+                        field.set(newInstance, rec_singletons.get(clazz));
+                    } else {
+                        field.set(newInstance, getBean(field.getType(), new_rec_deps, rec_singletons));
+                    }
                 } catch(NoSuchBeanDefinitionException e) {
                     throw e;
                 } catch (IllegalArgumentException | IllegalAccessException e) {

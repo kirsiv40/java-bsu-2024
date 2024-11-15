@@ -15,8 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 /**
- * Checks that {@link Inject} works correct when some arguments in
- * {@link Bean} are skipped, or {@link Bean} annotation is missing, like
+ * Проверяет, что {@link Inject} работает правильно, когда некоторые аргументы в
+ * {@link Bean} пропущены, или аннотация {@link Bean} отсутствует, например:
  * 
  * <pre>
  * @Bean(scope = BeanScope.PROTOTYPE)

@@ -1,7 +1,7 @@
 package by.bsu.dependency.context;
 
-import by.bsu.dependency.example.FirstBean;
-import by.bsu.dependency.example.OtherBean;
+import by.bsu.dependency.context.SimpleClasses.FirstBean;
+import by.bsu.dependency.context.SimpleClasses.OtherBean;
 import by.bsu.dependency.exceptions.ApplicationContextNotStartedException;
 import by.bsu.dependency.exceptions.NoSuchBeanDefinitionException;
 
@@ -11,15 +11,15 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-// Simple works the same way as HardCoded
+// Simple работает так же, как HardCoded
 class SimpleApplicationContextTest {
 
     private ApplicationContext applicationContext;
 
     @BeforeEach
     void init() {
-        // applicationContext = new SimpleApplicationContext(FirstBean.class, OtherBean.class);
         applicationContext = new SimpleApplicationContext(FirstBean.class, OtherBean.class);
+        // applicationContext = new SimpleApplicationContext(FirstBean.class, SecondBean.class);
     }
 
     @Test
