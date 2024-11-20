@@ -9,6 +9,8 @@ import by.bsu.dependency.exceptions.ApplicationContextNotStartedException;
 import by.bsu.dependency.exceptions.NoSuchBeanDefinitionException;
 
 public abstract class AbstractApplicationContext implements ApplicationContext {
+    protected ContextStatus is_started = ContextStatus.NOT_STARTED;
+
     protected record DefnRecord<T>(Class<T> clazz, BeanScope scope, String name, Optional<Method> init) {
     }    
     protected final Map<String, DefnRecord<?>> beanDefinitions;
@@ -17,12 +19,16 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
         NOT_STARTED,
         STARTED
     }
+
+    protected static String GenerateBeanName(Class<?> el) {
+        String[] allnames = el.getName().split("\\.");
+        String realname = allnames[allnames.length - 1];
+        return Character.toLowerCase(realname.charAt(0)) + realname.substring(1);
+    }
     
     AbstractApplicationContext(Map<String, DefnRecord<?>> beanMap) {
         beanDefinitions = beanMap;
-    } 
-
-    protected ContextStatus is_started = ContextStatus.NOT_STARTED;
+    }
 
     @Override
     public boolean isRunning() {

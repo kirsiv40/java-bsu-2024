@@ -3,10 +3,11 @@ package by.bsu.example;
 import by.bsu.dependency.annotation.Bean;
 import by.bsu.dependency.annotation.BeanScope;
 import by.bsu.dependency.annotation.Inject;
+import by.bsu.dependency.annotation.PostConstruct;
 
 @Bean(scope = BeanScope.PROTOTYPE)
 public class SecondBean {
-    public static String name = "B";
+    public String name;
     public int counter = 0;
 
     @Inject(canUseLastSameClass = true)
@@ -20,5 +21,10 @@ public class SecondBean {
         } else {
             System.out.println("Got back to the first bean \"" + name + "\". Stopping.");
         }
+    }
+
+    @PostConstruct
+    void init() {
+        name = "B";
     }
 }
